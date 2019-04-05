@@ -7,7 +7,7 @@ const addNotes = (title, body) => {
         title: title,
         body: body
     });
-    debugger;
+
     let string = JSON.stringify(notesJson);
     //console.log(check.length)
     if (!check.length) {

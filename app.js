@@ -48,4 +48,12 @@ yargs.command({
     }
 })
 //console.log(yargs.argv);
-yargs.parse();
+//yargs.parse();
+
+let f = () => {
+    //this.name = "ilik";
+    let show = () => {
+        console.log("name" + this.name);
+    }
+}
+f.show();
