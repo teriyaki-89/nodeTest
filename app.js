@@ -14,46 +14,50 @@ const notes = require('./notes');
 //console.log(chalk.hex('#DEADED')[color]('Bold gray!'))
 //console.log(color)
 yargs.command({
-    command: 'add',
-    description: 'Add Note',
-    builder: {
-        title: {
-            describe: 'text Title',
-            demandOption: true,
-            type: 'string'
-        },
-        body: {
-            describe: 'body text',
-            demandOption: true,
-            type: 'string'
-        }
-    },
-    handler(argv) {
-        let result = notes.addNotes(argv.title, argv.body);
-        //console.log(result)
-    }
-})
+	command: 'add',
+	description: 'Add Note',
+	builder: {
+		title: {
+			describe: 'text Title',
+			demandOption: true,
+			type: 'string'
+		},
+		body: {
+			describe: 'body text',
+			demandOption: true,
+			type: 'string'
+		}
+	},
+	handler(argv) {
+		let result = notes.addNotes(argv.title, argv.body);
+		//console.log(result)
+	}
+});
 yargs.command({
-    command: 'remove',
-    description: 'delete',
-    builder: {
-        body: {
-            describe: 'body text',
-            demandOption: true,
-            type: 'string'
-        }
-    },
-    handler(argv) {
-        console.log('deleting ' + argv.body);
-    }
-})
+	command: 'remove',
+	description: 'delete',
+	builder: {
+		body: {
+			describe: 'body text',
+			demandOption: true,
+			type: 'string'
+		}
+	},
+	handler(argv) {
+		console.log('deleting ' + argv.body);
+	}
+});
 //console.log(yargs.argv);
-//yargs.parse();
+// yargs.parse();
+// console.log('123');
 
 let f = () => {
-    //this.name = "ilik";
-    let show = () => {
-        console.log("name" + this.name);
-    }
-}
-f.show();
+	this.name = 'ilik';
+	const show = () => {
+		console.log('name' + this.name);
+	};
+};
+
+// let a = f.show();
+// a();
+console.log(process.argv[2]);
