@@ -8,6 +8,7 @@ const addNotes = (title, body) => {
     notesJson = loadNotes(myFile);
 
     let check = notesJson.filter( note =>   note.title === title   );
+    
 
    if (!check.length) {
        notesJson.push({
@@ -18,6 +19,8 @@ const addNotes = (title, body) => {
     let newString = JSON.stringify(notesJson);
     writeToFile(myFile, newString);
 
+   } else {
+       console.log(chalk.inverse.red('note already exists'))
    }
 
 }
@@ -50,9 +53,6 @@ const removeNotes = function (title) {
     } else {
         console.log(chalk.red('no found article'))
     }
-
-   
-
 }
 
 

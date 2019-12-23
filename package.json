@@ -13,6 +13,7 @@
     "chalk": "^2.4.1",
     "http": "0.0.0",
     "https": "^1.0.0",
+    "node-inspect": "^1.11.6",
     "querystring": "^0.2.0",
     "request": "^2.88.0",
     "validator": "^10.11.0",
