@@ -1,23 +1,28 @@
 const fs = require('fs');
-const file = 'notes.json'
+const myFile = 'notes.json'
+
+const chalk = require('chalk');
+
 const addNotes = (title, body) => {
-    notesJson = loadNotes()
-    let check = notesJson.filter(note => note.title === title)
-    notesJson.push({
+
+    notesJson = loadNotes(myFile);
+
+    let check = notesJson.filter( note =>   note.title === title   );
+
+   if (!check.length) {
+       notesJson.push({
         title: title,
         body: body
     });
 
-    let string = JSON.stringify(notesJson);
-    //console.log(check.length)
-    if (!check.length) {
-        writeToFile(file, string);
-        console.log(string)
-    }
+    let newString = JSON.stringify(notesJson);
+    writeToFile(myFile, newString);
+
+   }
 
 }
 
-const loadNotes = function () {
+const loadNotes = function (file) {
     try {
         const json = fs.readFileSync(file);
         const notesJson = JSON.parse(json);
@@ -31,18 +36,22 @@ const writeToFile = function (file, text) {
     fs.writeFileSync(file, text);
 }
 
-const removeNotes = function (title, body) {
-    try {
-        const json = fs.readFileSync('notes.json');
-        const notesJson = JSON.parse(json);
-        notesJson.push({
-            title: title,
-            body: body
-        })
+const removeNotes = function (title) {
+    notesJson = loadNotes(myFile);
 
-    } catch (e) {
-        return []
+    const newArray = notesJson.filter(function(item) {
+        return item.title !== title
+    });
+    
+    if (newArray.length !== notesJson.length ) {
+         let newString =  JSON.stringify(newArray);
+         writeToFile(myFile,newString)
+         console.log(chalk.green('deleting the article'))
+    } else {
+        console.log(chalk.red('no found article'))
     }
+
+   
 
 }
 

@@ -37,18 +37,19 @@ yargs.command({
 	command: 'remove',
 	description: 'delete',
 	builder: {
-		body: {
-			describe: 'body text',
+        title: {
+			describe: 'text Title',
 			demandOption: true,
 			type: 'string'
-		}
+		}		
 	},
 	handler(argv) {
-		console.log('deleting ' + argv.body);
+		//console.log('deleting ' + argv.body);
+        notes.removeNotes(argv.title);
 	}
 });
 //console.log(yargs.argv);
-// yargs.parse();
+yargs.parse();
 // console.log('123');
 
 let f = () => {
@@ -60,4 +61,4 @@ let f = () => {
 
 // let a = f.show();
 // a();
-console.log(process.argv[2]);
+//console.log(process.argv[2]);
