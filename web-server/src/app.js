@@ -5,6 +5,8 @@ const hbs = require('hbs');
 
 const app = express();
 
+
+
 // Define Paths
 let public = path.join(__dirname, '../public')
 let viewsPath = path.join(__dirname, '../templates/views');
@@ -16,7 +18,7 @@ app.set('views', viewsPath);
 hbs.registerPartials(partialsPath);
 
 // Static directory to server 
-app.use(express.static(public))
+//app.use(express.static(public))
 
 app.get('', (req, res) => {
     res.render('index', {
