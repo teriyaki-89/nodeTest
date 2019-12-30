@@ -6,7 +6,6 @@ const hbs = require('hbs');
 const app = express();
 
 
-
 // Define Paths
 let public = path.join(__dirname, '../public')
 let viewsPath = path.join(__dirname, '../templates/views');
@@ -21,10 +20,15 @@ hbs.registerPartials(partialsPath);
 //app.use(express.static(public))
 
 app.get('', (req, res) => {
-    res.render('index', {
-        title: 'dynamic title',
-        body: 'body goes here'
-    });
+    //console.log(req);
+    console.log(req.query.search)
+    res.send( {
+        req:req.query.search
+    })
+    //  res.render('index', {
+    //     title: 'dynamic title',
+    //     body: 'body goes here'
+    // });
 })
 
 app.get('/help', (req, res) => {
