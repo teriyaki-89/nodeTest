@@ -1,0 +1,79 @@
+const express = require("express");
+const router = new express.Router();
+const Tasks = require("../models/tasks");
+
+router.post("/tasks", (req, res) => {
+    const user = new Tasks(req.body);
+    user.save()
+        .then(result => {
+            res.status(200);
+            res.send(result);
+        })
+        .catch(e => {
+            res.status(400);
+            res.send(e);
+        });
+});
+
+router.get("/tasks", (req, res) => {
+    // console.log(req.query);
+    Tasks.find({})
+        .then(tasks => {
+            res.status(200).send(tasks);
+        })
+        .catch(e => {
+            res.status(500).send(e);
+        });
+});
+
+router.get("/tasks/:id", (req, res) => {
+    Tasks.find({ _id: req.params.id })
+        .then(tasks => {
+            res.status(200).send(tasks);
+        })
+        .catch(e => {
+            res.status(500).send(e);
+        });
+});
+
+router.patch("/tasks/:id", (req, res) => {
+    const updates = Object.keys(req.body);
+    let allowedProperties = ["description", "completed"];
+
+    try {
+        updates.forEach(property => {
+            if (allowedProperties.indexOf(property) == -1) {
+                console.log(property);
+                throw new Exception("");
+            }
+        });
+    } catch (e) {
+        return res.status(404).send({ response: "illegal property" });
+    }
+
+    Tasks.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+        .then(tasks => {
+            res.status(200).send(tasks);
+        })
+        .catch(e => {
+            res.status(500).send(e);
+        });
+});
+
+router.delete("/tasks/:id", async (req, res) => {
+    try {
+        const task = await Tasks.findByIdAndDelete(req.params.id);
+        if (!task) {
+            return res.status(404).send();
+        }
+        res.status(404).send(task);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+module.exports = router;
