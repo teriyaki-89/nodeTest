@@ -5,7 +5,6 @@ const User = require("../models/user");
 router.post("/users", async (req, res) => {
     //console.log(req.body);
     const user = new User(req.body);
-
     try {
         await user.save();
         res.status(200);
@@ -14,15 +13,21 @@ router.post("/users", async (req, res) => {
         res.status(400);
         res.send(e);
     }
-    // user.save()
-    //     .then(result => {
-    //         res.status(200);
-    //         res.send(result);
-    //     })
-    //     .catch(e => {
-    //         res.status(400);
-    //         res.send(e);
-    //     });
+});
+
+router.post("/users/login", async (req, res) => {
+    try {
+        const user = await User.findByCredentials(
+            req.body.email,
+            req.body.password
+        );
+        console.log(user);
+        res.status(200).send(user);
+    } catch (e) {
+        res.send(e.message);
+
+        //res.status(500).send();
+    }
 });
 
 router.get("/users", async (req, res) => {
