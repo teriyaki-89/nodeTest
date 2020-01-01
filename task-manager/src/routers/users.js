@@ -50,7 +50,7 @@ router.patch("/users/:id", async (req, res) => {
     var breakException = {};
     try {
         updates.forEach(property => {
-            console.log(property);
+            // console.log(property);
             if (allowedProperties.indexOf(property) == -1) {
                 throw breakException;
             }
@@ -60,11 +60,17 @@ router.patch("/users/:id", async (req, res) => {
     }
 
     try {
-        const user = await User.findByIdAndUpdate(
-            { _id: req.params.id },
-            req.body,
-            { new: true, runValidators: true, useFindAndModify: false }
-        );
+        /* in order to use Schema pre password hashing */
+        const user = await User.findById({ _id: req.params.id });
+        updates.forEach(update => (user[update] = req.body[update]));
+        await user.save();
+        //     { _id: req.params.id },
+        // const user = await User.findByIdAndUpdate(
+        //     { _id: req.params.id },
+        //     req.body,
+        //     { new: true, runValidators: true, useFindAndModify: false }
+        // );
+
         if (!user) return res.status(404).send();
         res.status(201).send(user);
     } catch (e) {

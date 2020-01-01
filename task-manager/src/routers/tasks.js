@@ -36,7 +36,7 @@ router.get("/tasks/:id", (req, res) => {
         });
 });
 
-router.patch("/tasks/:id", (req, res) => {
+router.patch("/tasks/:id", async (req, res) => {
     const updates = Object.keys(req.body);
     let allowedProperties = ["description", "completed"];
 
@@ -50,18 +50,27 @@ router.patch("/tasks/:id", (req, res) => {
     } catch (e) {
         return res.status(404).send({ response: "illegal property" });
     }
+    try {
+        const task = await Tasks.findById({ _id: req.params.id });
+        updates.forEach(update => (user[update] = req.body[update]));
+        await task.save();
 
-    Tasks.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-        useFindAndModify: false
-    })
-        .then(tasks => {
-            res.status(200).send(tasks);
-        })
-        .catch(e => {
-            res.status(500).send(e);
-        });
+        // Tasks.findByIdAndUpdate(req.params.id, req.body, {
+        //     new: true,
+        //     runValidators: true,
+        //     useFindAndModify: false
+        // })
+        //     .then(tasks => {
+        //         res.status(200).send(tasks);
+        //     })
+        //     .catch(e => {
+        //         res.status(500).send(e);
+        //     });
+        if (!task) return res.status(404).send();
+        res.status(201).send(task);
+    } catch (e) {
+        res.status(500).send(e);
+    }
 });
 
 router.delete("/tasks/:id", async (req, res) => {
