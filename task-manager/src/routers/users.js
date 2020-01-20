@@ -23,7 +23,9 @@ router.post("/users/login", async (req, res) => {
             req.body.password
         );
         const token = await user.generateAuthToken();
-        let newObject = Object.assign({ user, token });
+        console.log(user.getPublicProfile());
+        //let newObject = Object.assign({ user: user.getPublicProfile(), token }); // use methods to hide secret data
+        let newObject = Object.assign({ user, token }); // use toJSON to hide data
         res.status(200).send(newObject);
     } catch (e) {
         res.status(500).send(e.message);
