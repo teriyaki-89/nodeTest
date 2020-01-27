@@ -38,6 +38,13 @@ const userSchema = new mongoose.Schema({
     ]
 });
 
+/* relate local _id to Tasks model owner field */
+userSchema.virtual("tasks", {
+    ref: "Tasks",
+    localField: "_id",
+    foreignField: "owner"
+});
+
 userSchema.methods.getPublicProfile = function() {
     const user = this;
     const userObject = user.toObject();
