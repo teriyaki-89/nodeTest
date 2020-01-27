@@ -60,15 +60,15 @@ router.get("/users/me", auth, async (req, res) => {
     res.send(req.user);
 });
 
-router.get("/users/:id", async (req, res) => {
-    // console.log(req.params);
-    try {
-        const user = await User.find({ _id: req.params.id });
-        res.status(201).send(user);
-    } catch (e) {
-        res.status(404).send(e);
-    }
-});
+// router.get("/users/:id", async (req, res) => {
+//     // console.log(req.params);
+//     try {
+//         const user = await User.find({ _id: req.params.id });
+//         res.status(201).send(user);
+//     } catch (e) {
+//         res.status(404).send(e);
+//     }
+// });
 
 router.patch("/users/:id", async (req, res) => {
     const updates = Object.keys(req.body);
