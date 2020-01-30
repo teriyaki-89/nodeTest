@@ -6,6 +6,8 @@ const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
 
+const Tasks = require("./tasks");
+
 const userSchema = new mongoose.Schema({
     name: { type: String },
     age: { type: Number },
@@ -91,6 +93,15 @@ userSchema.pre("save", async function(next) {
     if (user.isModified("password")) {
         user.password = await bcrypt.hash(user.password, 8);
     }
+    next();
+});
+
+userSchema.pre("remove", async function(next) {
+    const user = this;
+    console.log(user);
+
+    await Tasks.deleteMany({ owner: user._id });
+
     next();
 });
 
