@@ -6,7 +6,12 @@ const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
 
+<<<<<<< Updated upstream
 const Tasks = require("./tasks");
+=======
+const Tasks = require('./tasks')
+
+>>>>>>> Stashed changes
 
 const userSchema = new mongoose.Schema({
     name: { type: String },
@@ -96,14 +101,11 @@ userSchema.pre("save", async function(next) {
     next();
 });
 
-userSchema.pre("remove", async function(next) {
+userSchema.pre('remove', async function(next){
     const user = this;
-    console.log(user);
-
-    await Tasks.deleteMany({ owner: user._id });
-
+    Tasks.deleteMany({owner:user._id});
     next();
-});
+})
 
 const User = mongoose.model("User", userSchema);
 
