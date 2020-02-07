@@ -24,17 +24,33 @@ router.get("/tasks", auth, async (req, res) => {
     if (!req.user) {
         return res.status(401).send("authenticate please");
     }
-    // console.log(req.query);
+        
+    const match = {};
+    if (req.query.completed) {
+        match.completed = req.query.completed
+    }
     /* find in user model virtual tasks and get all tasks related to that user */
-    /*await req.user.populate("tasks").execPopulate();
-    res.status(200).send(req.user.tasks);*/
-    Tasks.find({ owner: req.user._id })
-        .then(tasks => {
-            res.status(200).send(tasks);
-        })
-        .catch(e => {
-            res.status(500).send(e);
-        });
+    try {
+        await req.user.populate({
+            path:"tasks",
+            match,
+            options:{
+                limit: parseInt(req.query.limit),
+                skip: parseInt(req.query.skip)
+            }            
+        }).execPopulate();
+        res.status(200).send(req.user.tasks);
+    } catch(e) {
+        res.status(500).send(e); 
+    }
+
+    // Tasks.find({ owner: req.user._id })
+    //     .then(tasks => {
+    //         res.status(200).send(tasks);
+    //     })
+    //     .catch(e => {
+    //         res.status(500).send(e);
+    //     });
 });
 
 router.get("/tasks/:id", auth, (req, res) => {

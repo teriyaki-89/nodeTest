@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
             }
         }
     ]
+    
+},
+{
+    timestamps:true
 });
 
 /* relate local _id to Tasks model owner field */
