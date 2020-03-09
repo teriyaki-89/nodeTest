@@ -6,48 +6,47 @@ const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
 
-const Tasks = require('./tasks')
+const Tasks = require("./tasks");
 
-
-const userSchema = new mongoose.Schema({
-    name: { type: String },
-    age: { type: Number },
-    email: {
-        type: String,
-        unique: true,
-        required: true,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error("must be email");
+const userSchema = new mongoose.Schema(
+    {
+        name: { type: String },
+        age: { type: Number },
+        email: {
+            type: String,
+            unique: true,
+            required: true,
+            validate(value) {
+                if (!validator.isEmail(value)) {
+                    throw new Error("must be email");
+                }
             }
+        },
+        password: {
+            type: String,
+            required: true,
+            validate(value) {
+                if (value.length < 6) {
+                    throw new Error("should be not less than 6 figures");
+                }
+            }
+        },
+        tokens: [
+            {
+                token: {
+                    type: String,
+                    required: true
+                }
+            }
+        ],
+        avatar: {
+            type: Buffer
         }
     },
-    password: {
-        type: String,
-        required: true,
-        validate(value) {
-            if (value.length < 6) {
-                throw new Error("should be not less than 6 figures");
-            }
-        }
-    },
-    tokens: [
-        {
-            token: {
-                type: String,
-                required: true
-            }
-        }
-    ],
-    avatar: {
-        type:Buffer
+    {
+        timestamps: true
     }
-
-    
-},
-{
-    timestamps:true
-});
+);
 
 /* relate local _id to Tasks model owner field */
 userSchema.virtual("tasks", {
@@ -65,12 +64,16 @@ userSchema.methods.getPublicProfile = function() {
     return userObject;
 };
 
+/*
+Overwrites default objects to toJSON(), for determining how Mongoose documents get serialized by JSON.stringify()
+ */
 userSchema.methods.toJSON = function() {
     const user = this;
     const userObject = user.toObject();
     /* hide secret attributes */
     delete userObject.password;
     delete userObject.tokens;
+    delete userObject.avatar;
     return userObject;
 };
 
@@ -105,13 +108,13 @@ userSchema.pre("save", async function(next) {
     next();
 });
 
-userSchema.pre('remove', async function(next){
+userSchema.pre("remove", async function(next) {
     const user = this;
     //console.log(user);
-    let result = await Tasks.deleteMany({owner:user._id});
+    let result = await Tasks.deleteMany({ owner: user._id });
     //console.log(result);
     next();
-})
+});
 
 const User = mongoose.model("User", userSchema);
 
