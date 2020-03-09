@@ -55,15 +55,6 @@ userSchema.virtual("tasks", {
     foreignField: "owner"
 });
 
-userSchema.methods.getPublicProfile = function() {
-    const user = this;
-    const userObject = user.toObject();
-    /* hide secret attributes */
-    delete userObject.password;
-    delete userObject.tokens;
-    return userObject;
-};
-
 /*
 Overwrites default objects to toJSON(), for determining how Mongoose documents get serialized by JSON.stringify()
  */
