@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
                 if (!validator.isEmail(value)) {
                     throw new Error("must be email");
                 }
-            }
+            },
         },
         password: {
             type: String,
@@ -29,22 +29,22 @@ const userSchema = new mongoose.Schema(
                 if (value.length < 6) {
                     throw new Error("should be not less than 6 figures");
                 }
-            }
+            },
         },
         tokens: [
             {
                 token: {
                     type: String,
-                    required: true
-                }
-            }
+                    required: true,
+                },
+            },
         ],
         avatar: {
-            type: Buffer
-        }
+            type: Buffer,
+        },
     },
     {
-        timestamps: true
+        timestamps: true,
     }
 );
 
@@ -52,13 +52,13 @@ const userSchema = new mongoose.Schema(
 userSchema.virtual("tasks", {
     ref: "Tasks",
     localField: "_id",
-    foreignField: "owner"
+    foreignField: "owner",
 });
 
 /*
 Overwrites default objects to toJSON(), for determining how Mongoose documents get serialized by JSON.stringify()
  */
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
     const user = this;
     const userObject = user.toObject();
     /* hide secret attributes */
@@ -68,9 +68,9 @@ userSchema.methods.toJSON = function() {
     return userObject;
 };
 
-userSchema.methods.generateAuthToken = async function() {
+userSchema.methods.generateAuthToken = async function () {
     const user = this;
-    const token = jwt.sign({ _id: user._id.toString() }, "thisIsMySecret");
+    const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
     user.tokens = user.tokens.concat({ token });
     await user.save();
     return token;
@@ -91,7 +91,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 };
 
 /* hash password before saving */
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", async function (next) {
     const user = this;
     if (user.isModified("password")) {
         user.password = await bcrypt.hash(user.password, 8);
@@ -99,7 +99,7 @@ userSchema.pre("save", async function(next) {
     next();
 });
 
-userSchema.pre("remove", async function(next) {
+userSchema.pre("remove", async function (next) {
     const user = this;
     //console.log(user);
     let result = await Tasks.deleteMany({ owner: user._id });

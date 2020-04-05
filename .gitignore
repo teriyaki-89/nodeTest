@@ -20,3 +20,5 @@ selenium-debug.log
 *.ntvs*
 *.njsproj
 *.sln
+task-manager/src/emails/sendgrid.env
+task-manager/config/dev.env

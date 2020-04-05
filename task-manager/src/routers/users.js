@@ -4,6 +4,7 @@ const User = require("../models/user");
 const auth = require("../middleware/auth");
 const multer = require("multer");
 const sharp = require("sharp");
+const { sendWelcomeEmail } = require("../emails/account");
 
 router.post("/users", async (req, res) => {
     //console.log(req.body);
@@ -11,6 +12,7 @@ router.post("/users", async (req, res) => {
     try {
         const token = await user.generateAuthToken();
         let newObject = Object.assign({ user, token });
+        sendWelcomeEmail(user.email, user.name);
         res.status(200).send(newObject);
     } catch (e) {
         res.status(400);
@@ -20,10 +22,7 @@ router.post("/users", async (req, res) => {
 
 router.post("/users/login", async (req, res) => {
     try {
-        const user = await User.findByCredentials(
-            req.body.email,
-            req.body.password
-        );
+        const user = await User.findByCredentials(req.body.email, req.body.password);
         const token = await user.generateAuthToken();
         //console.log(user.getPublicProfile());
         //let newObject = Object.assign({ user: user.getPublicProfile(), token }); // use methods to hide secret data
