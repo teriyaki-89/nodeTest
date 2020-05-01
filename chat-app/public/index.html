@@ -2,7 +2,11 @@
 
 <body>
     <h1>Chat app</h1>
-    <input type="button" id="inc" value="+1" />
+    <form id="messageForm">
+        <input placeholder="message" name="message">
+        <button>Send</button>
+    </form>
+    <button id="location">share location</button>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/chat.js"></script>
 
