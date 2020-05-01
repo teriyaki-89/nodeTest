@@ -11,10 +11,12 @@
     "dependencies": {
         "axios": "0.18.1",
         "chalk": "^2.4.2",
+        "express": "^4.17.1",
         "http": "0.0.0",
         "https": "^1.0.0",
         "multer": "^1.4.2",
         "node-inspect": "^1.11.6",
+        "nodemon": "^2.0.3",
         "querystring": "^0.2.0",
         "request": "^2.88.2",
         "validator": "^10.11.0",
